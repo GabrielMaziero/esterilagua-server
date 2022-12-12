@@ -1,11 +1,11 @@
-import { NodemailerProvider } from "../providers/nodemailer-provider";
-import { SendEmailController } from "./sendEmail/sendEmailController";
-import { SendEmailUseCase } from "./sendEmail/sendEmailUseCase";
-import * as nodemailer from "nodemailer";
+import axios from "axios";
 import 'dotenv/config';
+import { RecaptchaProvider } from "../providers/recaptcha-provider";
+import { VerifyRecaptchaController } from "../useCases/verifyRecaptcha/verifyRecaptchaController";
+import { VerifyRecaptchaUseCase } from "../useCases/verifyRecaptcha/verifyRecaptchaUseCase";
 
-const nodemailerProvider = new NodemailerProvider(process.env.USER_EMAIL, process.env.PASS, process.env.HOST, process.env.PORT_EMAIL, nodemailer)
-const sendEmailUseCase = new SendEmailUseCase(nodemailerProvider);
-const sendEmailController = new SendEmailController(sendEmailUseCase)
+const recaptchaProvider = new RecaptchaProvider(axios);
+const verifyRecaptchaUseCase = new VerifyRecaptchaUseCase(recaptchaProvider);
+const verifyRecaptchaController = new VerifyRecaptchaController(verifyRecaptchaUseCase);
 
-export { sendEmailUseCase, sendEmailController }
+export { verifyRecaptchaUseCase, verifyRecaptchaController };

@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
 import { Controller } from "../protocols/controller";
-import { SendEmailUseCase } from "./sendEmailUseCase";
+import { VerifyRecaptchaUseCase } from "./verifyRecaptchaUseCase";
 
-export class SendEmailController implements Controller {
+export class VerifyRecaptchaController implements Controller {
 
-  constructor(private sendEmailUseCase: SendEmailUseCase) { }
+  constructor(private verifyRecaptchaUseCase: VerifyRecaptchaUseCase) { }
 
   async handle(request: Request, response: Response): Promise<Response> {
-    const { message, subject, to } = request.body
+    const { token } = request.query
 
     try {
-      const res = await this.sendEmailUseCase.execute({ message, subject, to })
-      return response.status(200).json(res)
+      const res = await this.verifyRecaptchaUseCase.execute(String(token))
+      return response.status(200).json(res.data)
     } catch (error) {
       if (error instanceof Error) {
         return response.status(400).json({ message: error.message || 'unexpected error' })
